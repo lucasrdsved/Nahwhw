@@ -1,20 +1,31 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar';
-import CardAluno from '@/components/CardAluno';
+import { CheckCircle2, PlusCircle } from 'lucide-react';
+
+import AlunoCard from '@/components/dashboard/AlunoCard';
+import Navbar from '@/components/navigation/Navbar';
 import { supabase } from '@/lib/supabaseClientMock';
 import { generateId } from '@/lib/mockUtils';
-import { CheckCircle2, PlusCircle } from 'lucide-react';
+import type { Aluno, Session } from '@/types';
 
 const objetivos = ['Hipertrofia', 'Condicionamento', 'Performance', 'Reabilitação'];
 
+interface FormValues {
+  nome: string;
+  email: string;
+  objetivo: string;
+  idade: string;
+  peso: string;
+  altura: string;
+}
+
 const AlunosPage = () => {
-  const [alunos, setAlunos] = useState([]);
-  const [session, setSession] = useState(null);
-  const [saving, setSaving] = useState(false);
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [session, setSession] = useState<Session | null>(null);
+  const [saving, setSaving] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<FormValues>({
     nome: '',
     email: '',
     objetivo: objetivos[0],
@@ -25,7 +36,7 @@ const AlunosPage = () => {
 
   const fetchAlunos = async () => {
     const { data } = await supabase.from('alunos').select('*, profiles(*)');
-    setAlunos(data ?? []);
+    setAlunos((data as Aluno[] | null) ?? []);
   };
 
   useEffect(() => {
@@ -34,7 +45,7 @@ const AlunosPage = () => {
       setSession(data?.session ?? null);
       await fetchAlunos();
     };
-    bootstrap();
+    void bootstrap();
   }, []);
 
   const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
@@ -87,7 +98,7 @@ const AlunosPage = () => {
           </p>
           <div className="grid gap-4 md:grid-cols-2">
             {alunos.map((aluno) => (
-              <CardAluno key={aluno.id} aluno={aluno} />
+              <AlunoCard key={aluno.id} aluno={aluno} />
             ))}
           </div>
         </div>

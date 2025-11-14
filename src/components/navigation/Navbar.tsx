@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, Dumbbell, Home, User } from 'lucide-react';
+import { BarChart3, Dumbbell, Home, User, type LucideIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClientMock';
 
-const navItems = [
+import { supabase } from '@/lib/supabaseClientMock';
+import type { UserRole } from '@/types';
+
+const navItems: Array<{ href: string; label: string; icon: LucideIcon }> = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/alunos', label: 'Alunos', icon: Dumbbell },
   { href: '/treino', label: 'Treino', icon: BarChart3 },
@@ -15,16 +17,19 @@ const navItems = [
 
 const Navbar = () => {
   const pathname = usePathname();
-  const [role, setRole] = useState('personal');
+  const [role, setRole] = useState<UserRole>('personal');
 
   useEffect(() => {
     const loadSession = async () => {
       const { data } = await supabase.auth.getSession();
-      if (data?.session?.profile?.role) {
-        setRole(data.session.profile.role);
+      const sessionRole = data?.session?.profile?.role;
+
+      if (sessionRole === 'personal' || sessionRole === 'aluno') {
+        setRole(sessionRole);
       }
     };
-    loadSession();
+
+    void loadSession();
   }, []);
 
   return (

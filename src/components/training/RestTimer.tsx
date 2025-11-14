@@ -3,11 +3,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pause, Play, RotateCcw } from 'lucide-react';
 
-const TimerCircular = ({ duration = 60, autoStart = false, label = 'Descanso', onComplete }) => {
+interface RestTimerProps {
+  duration?: number;
+  autoStart?: boolean;
+  label?: string;
+  onComplete?: () => void;
+}
+
+const RestTimer = ({ duration = 60, autoStart = false, label = 'Descanso', onComplete }: RestTimerProps) => {
   const radius = 80;
   const circumference = 2 * Math.PI * radius;
-  const [timeLeft, setTimeLeft] = useState(duration);
-  const [running, setRunning] = useState(autoStart);
+  const [timeLeft, setTimeLeft] = useState<number>(duration);
+  const [running, setRunning] = useState<boolean>(autoStart);
 
   useEffect(() => {
     setTimeLeft(duration);
@@ -18,16 +25,21 @@ const TimerCircular = ({ duration = 60, autoStart = false, label = 'Descanso', o
   }, [autoStart]);
 
   useEffect(() => {
-    if (!running) return;
+    if (!running) {
+      return;
+    }
+
     if (timeLeft <= 0) {
       setRunning(false);
       onComplete?.();
       return;
     }
-    const interval = setInterval(() => {
+
+    const interval = window.setInterval(() => {
       setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
-    return () => clearInterval(interval);
+
+    return () => window.clearInterval(interval);
   }, [running, timeLeft, onComplete]);
 
   const progress = useMemo(() => {
@@ -72,6 +84,7 @@ const TimerCircular = ({ duration = 60, autoStart = false, label = 'Descanso', o
       </div>
       <div className="flex items-center gap-3">
         <button
+          type="button"
           onClick={() => setRunning((prev) => !prev)}
           className="flex items-center gap-2 rounded-pill border border-outline/60 bg-surface px-5 py-2 text-sm font-semibold text-white transition hover:border-neon hover:text-neon"
         >
@@ -86,6 +99,7 @@ const TimerCircular = ({ duration = 60, autoStart = false, label = 'Descanso', o
           )}
         </button>
         <button
+          type="button"
           onClick={() => {
             setTimeLeft(duration);
             setRunning(false);
@@ -99,4 +113,4 @@ const TimerCircular = ({ duration = 60, autoStart = false, label = 'Descanso', o
   );
 };
 
-export default TimerCircular;
+export default RestTimer;

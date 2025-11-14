@@ -1,35 +1,43 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar';
-import { supabase } from '@/lib/supabaseClientMock';
-import { storage } from '@/lib/mockUtils';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { LogOut, RefreshCcw, ShieldCheck, UserCircle } from 'lucide-react';
 
+import Navbar from '@/components/navigation/Navbar';
+import { supabase } from '@/lib/supabaseClientMock';
+import { storage } from '@/lib/mockUtils';
+import type { Session } from '@/types';
+
+interface MetricsSummary {
+  alunos: number;
+  treinos: number;
+  feedback: number;
+}
+
 const PerfilPage = () => {
-  const [session, setSession] = useState(null);
-  const [metrics, setMetrics] = useState({ alunos: 0, treinos: 0, feedback: 0 });
+  const [session, setSession] = useState<Session | null>(null);
+  const [metrics, setMetrics] = useState<MetricsSummary>({ alunos: 0, treinos: 0, feedback: 0 });
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
-      const [{ data: sessionData }, { data: alunosData }, { data: treinosData }, { data: feedbackData }] = await Promise.all([
+      const [sessionResult, alunosResult, treinosResult, feedbackResult] = await Promise.all([
         supabase.auth.getSession(),
         supabase.from('alunos').select('*'),
         supabase.from('treinos').select('*'),
         supabase.from('feedback').select('*'),
       ]);
 
-      setSession(sessionData?.session ?? null);
+      setSession(sessionResult.data?.session ?? null);
       setMetrics({
-        alunos: alunosData?.length ?? 0,
-        treinos: treinosData?.length ?? 0,
-        feedback: feedbackData?.length ?? 0,
+        alunos: (alunosResult.data as unknown[] | null)?.length ?? 0,
+        treinos: (treinosResult.data as unknown[] | null)?.length ?? 0,
+        feedback: (feedbackResult.data as unknown[] | null)?.length ?? 0,
       });
     };
 
-    loadData();
+    void loadData();
   }, []);
 
   const handleSignOut = async () => {

@@ -1,50 +1,52 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Navbar from '@/components/Navbar';
-import CardAluno from '@/components/CardAluno';
-import GraficoProgresso from '@/components/GraficoProgresso';
-import CardExercicio from '@/components/CardExercicio';
-import { supabase } from '@/lib/supabaseClientMock';
 import { Activity, CalendarRange, Sparkles } from 'lucide-react';
 
+import AlunoCard from '@/components/dashboard/AlunoCard';
+import ExerciseCard from '@/components/dashboard/ExerciseCard';
+import ProgressChart, { type ProgressChartDatum } from '@/components/dashboard/ProgressChart';
+import Navbar from '@/components/navigation/Navbar';
+import { supabase } from '@/lib/supabaseClientMock';
+import type { Aluno, Feedback, Progresso, Session, Treino } from '@/types';
+type TreinoCompleto = Treino & { treinos_exercicios?: Treino['treinos_exercicios'] };
+
 const DashboardPage = () => {
-  const [loading, setLoading] = useState(true);
-  const [session, setSession] = useState(null);
-  const [alunos, setAlunos] = useState([]);
-  const [treinos, setTreinos] = useState([]);
-  const [progresso, setProgresso] = useState([]);
-  const [feedback, setFeedback] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [treinos, setTreinos] = useState<TreinoCompleto[]>([]);
+  const [progresso, setProgresso] = useState<Progresso[]>([]);
+  const [feedback, setFeedback] = useState<Feedback[]>([]);
 
   useEffect(() => {
     const bootstrap = async () => {
-      const [{ data: sessionData }, { data: alunosData }, { data: treinosData }, { data: progressoData }, { data: feedbackData }] =
-        await Promise.all([
-          supabase.auth.getSession(),
-          supabase.from('alunos').select('*, profiles(*)'),
-          supabase.from('treinos').select('*, treinos_exercicios(*, exercicios(*))'),
-          supabase.from('progresso').select('*'),
-          supabase.from('feedback').select('*'),
-        ]);
+      const [sessionResult, alunosResult, treinosResult, progressoResult, feedbackResult] = await Promise.all([
+        supabase.auth.getSession(),
+        supabase.from('alunos').select('*, profiles(*)'),
+        supabase.from('treinos').select('*, treinos_exercicios(*, exercicios(*))'),
+        supabase.from('progresso').select('*'),
+        supabase.from('feedback').select('*'),
+      ]);
 
-      setSession(sessionData?.session ?? null);
-      setAlunos(alunosData ?? []);
-      setTreinos(treinosData ?? []);
-      setProgresso(progressoData ?? []);
-      setFeedback(feedbackData ?? []);
+      setSession(sessionResult.data?.session ?? null);
+      setAlunos((alunosResult.data as Aluno[] | null) ?? []);
+      setTreinos((treinosResult.data as TreinoCompleto[] | null) ?? []);
+      setProgresso((progressoResult.data as Progresso[] | null) ?? []);
+      setFeedback((feedbackResult.data as Feedback[] | null) ?? []);
       setLoading(false);
     };
 
-    bootstrap();
+    void bootstrap();
   }, []);
 
-  const treinoDoDia = useMemo(() => {
+  const treinoDoDia = useMemo<TreinoCompleto | null>(() => {
     if (!treinos.length) return null;
     const hoje = new Date().getDay();
     return treinos.find((treino) => treino.dia_semana === hoje) ?? treinos[0];
   }, [treinos]);
 
-  const graficoData = useMemo(() => {
+  const graficoData = useMemo<ProgressChartDatum[]>(() => {
     return progresso
       .slice()
       .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())
@@ -69,13 +71,13 @@ const DashboardPage = () => {
 
       <section className="grid gap-6 lg:grid-cols-3">
         {alunos.map((aluno) => (
-          <CardAluno key={aluno.id} aluno={aluno} />
+          <AlunoCard key={aluno.id} aluno={aluno} />
         ))}
       </section>
 
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <GraficoProgresso data={graficoData} titulo="Performance recente" legenda="Carga total x sessões" />
+          <ProgressChart data={graficoData} titulo="Performance recente" legenda="Carga total x sessões" />
         </div>
         <div className="glass-panel flex h-full flex-col gap-6 p-6">
           <div>
@@ -111,7 +113,7 @@ const DashboardPage = () => {
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               {treinoDoDia.treinos_exercicios?.map((prescription) => (
-                <CardExercicio
+                <ExerciseCard
                   key={prescription.id}
                   exercicio={prescription.exercicios}
                   prescription={prescription}

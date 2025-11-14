@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import React from 'react';
-import PwaSetup from '@/components/PwaSetup';
+import PwaSetup from '@/components/pwa/PwaSetup';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -10,11 +10,14 @@ export const metadata: Metadata = {
   title: 'EvoFit Ultimate • Personal Trainer PWA',
   description: 'PWA premium para personal trainers e alunos com backend Supabase simulado.',
   manifest: '/manifest.json',
-  themeColor: '#05070F',
   icons: {
     icon: '/icons/icon-192x192.svg',
     apple: '/icons/icon-192x192.svg',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#05070F',
 };
 
 export default function RootLayout({

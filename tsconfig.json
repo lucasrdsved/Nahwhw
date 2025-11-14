@@ -14,13 +14,14 @@
       "node"
     ],
     "moduleResolution": "bundler",
+    "baseUrl": ".",
     "isolatedModules": true,
     "moduleDetection": "force",
-    "allowJs": true,
+    "allowJs": false,
     "jsx": "preserve",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ]
     },
     "allowImportingTsExtensions": true,

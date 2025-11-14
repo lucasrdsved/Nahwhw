@@ -1,17 +1,21 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Navbar from '@/components/Navbar';
-import TimerCircular from '@/components/TimerCircular';
-import CardExercicio from '@/components/CardExercicio';
-import { supabase } from '@/lib/supabaseClientMock';
 import { CheckCircle, Loader2 } from 'lucide-react';
 
+import ExerciseCard from '@/components/dashboard/ExerciseCard';
+import Navbar from '@/components/navigation/Navbar';
+import RestTimer from '@/components/training/RestTimer';
+import { supabase } from '@/lib/supabaseClientMock';
+import type { Aluno, Progresso, Session, Treino, TreinoExercicio } from '@/types';
+
+type TreinoCompleto = Treino & { treinos_exercicios?: TreinoExercicio[] };
+
 const TreinoPage = () => {
-  const [session, setSession] = useState(null);
-  const [alunos, setAlunos] = useState([]);
-  const [treinos, setTreinos] = useState([]);
-  const [progresso, setProgresso] = useState([]);
+  const [session, setSession] = useState<Session | null>(null);
+  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [treinos, setTreinos] = useState<TreinoCompleto[]>([]);
+  const [progresso, setProgresso] = useState<Progresso[]>([]);
   const [selectedAluno, setSelectedAluno] = useState<string | null>(null);
   const [seriesConcluidas, setSeriesConcluidas] = useState<Record<string, number>>({});
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -19,27 +23,29 @@ const TreinoPage = () => {
 
   useEffect(() => {
     const bootstrap = async () => {
-      const [{ data: sessionData }, { data: alunosData }, { data: treinosData }, { data: progressoData }] = await Promise.all([
+      const [sessionResult, alunosResult, treinosResult, progressoResult] = await Promise.all([
         supabase.auth.getSession(),
         supabase.from('alunos').select('*, profiles(*)'),
         supabase.from('treinos').select('*, treinos_exercicios(*, exercicios(*))'),
         supabase.from('progresso').select('*'),
       ]);
 
-      setSession(sessionData?.session ?? null);
-      setAlunos(alunosData ?? []);
-      setTreinos(treinosData ?? []);
-      setProgresso(progressoData ?? []);
+      setSession(sessionResult.data?.session ?? null);
+      const alunosData = (alunosResult.data as Aluno[] | null) ?? [];
+      setAlunos(alunosData);
+      const treinosData = (treinosResult.data as TreinoCompleto[] | null) ?? [];
+      setTreinos(treinosData);
+      setProgresso((progressoResult.data as Progresso[] | null) ?? []);
 
-      if (sessionData?.session?.profile?.role === 'aluno') {
-        const aluno = alunosData?.find((item) => item.profile_id === sessionData.session.profile.id);
+      if (sessionResult.data?.session?.profile?.role === 'aluno') {
+        const aluno = alunosData.find((item) => item.profile_id === sessionResult.data.session.profile.id);
         setSelectedAluno(aluno?.id ?? null);
       } else {
-        setSelectedAluno(alunosData?.[0]?.id ?? null);
+        setSelectedAluno(alunosData[0]?.id ?? null);
       }
     };
 
-    bootstrap();
+    void bootstrap();
   }, []);
 
   const treinosFiltrados = useMemo(() => {
@@ -56,14 +62,14 @@ const TreinoPage = () => {
       .slice(0, 5);
   }, [progresso, selectedAluno]);
 
-  const handleUpdatePrescricao = async (id: string, campo: string, valor: any) => {
+  const handleUpdatePrescricao = async <K extends keyof TreinoExercicio>(id: string, campo: K, valor: TreinoExercicio[K]) => {
     setUpdatingId(id);
-    const payload = { [campo]: valor };
+    const payload = { [campo]: valor } as Partial<TreinoExercicio>;
     await supabase.from('treinos_exercicios').update(payload).eq('id', id);
     setTreinos((prev) =>
       prev.map((treino) => ({
         ...treino,
-        treinos_exercicios: treino.treinos_exercicios.map((item) =>
+        treinos_exercicios: treino.treinos_exercicios?.map((item) =>
           item.id === id ? { ...item, ...payload } : item
         ),
       }))
@@ -110,7 +116,7 @@ const TreinoPage = () => {
               <div className="grid gap-4">
                 {treinoAtual.treinos_exercicios.map((prescricao) => (
                   <div key={prescricao.id} className="glass-panel grid gap-4 p-5 lg:grid-cols-[1.2fr_1fr]">
-                    <CardExercicio exercicio={prescricao.exercicios} prescription={prescricao} />
+                    <ExerciseCard exercicio={prescricao.exercicios} prescription={prescricao} />
                     <div className="flex flex-col gap-4">
                       <div className="grid grid-cols-3 gap-3 text-xs text-slate-300">
                         <label className="space-y-2">
@@ -160,7 +166,7 @@ const TreinoPage = () => {
             </div>
             <div className="space-y-4">
               {exercicioPrincipal ? (
-                <TimerCircular
+                <RestTimer
                   key={exercicioPrincipal.id}
                   duration={Number(exercicioPrincipal.descanso_s) || 60}
                   label={`Descanso - ${exercicioPrincipal.exercicios?.nome}`}
