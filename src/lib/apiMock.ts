@@ -190,7 +190,8 @@ const applyPolicies = <T extends TableName>(table: T, rows: TableRow<T>[], db: M
     return rows
       .filter((row) => {
         const record = row as Record<string, unknown>;
-        return record.user_id === profile.user_id;
+        const userId = (record.user_id ?? record.id) as string | undefined;
+        return userId === profile.user_id;
       })
       .map((row) => row) as TableRow<T>[];
   }
