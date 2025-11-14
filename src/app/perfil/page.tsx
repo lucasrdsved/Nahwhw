@@ -15,6 +15,11 @@ interface MetricsSummary {
   feedback: number;
 }
 
+/**
+ * Profile control centre for managing session data, mock resets and viewing aggregate metrics.
+ *
+ * @returns The perfil page layout combining identity, metrics and maintenance actions.
+ */
 const PerfilPage = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [metrics, setMetrics] = useState<MetricsSummary>({ alunos: 0, treinos: 0, feedback: 0 });
@@ -40,6 +45,11 @@ const PerfilPage = () => {
     void loadData();
   }, []);
 
+  /**
+   * Signs the current user out of the mock Supabase session and surfaces a toast notification.
+   *
+   * @returns A promise that resolves when sign-out operations complete.
+   */
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setSession(null);
@@ -47,6 +57,11 @@ const PerfilPage = () => {
     setTimeout(() => setToast(null), 2200);
   };
 
+  /**
+   * Clears the persisted mock database allowing the default dataset to be restored on reload.
+   *
+   * @returns Nothing.
+   */
   const handleResetMock = () => {
     storage.remove('supabase.mock.db');
     setToast('Banco mock resetado. Atualize a página para restaurar os dados base.');

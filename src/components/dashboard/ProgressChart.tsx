@@ -1,16 +1,31 @@
 'use client';
 
+/**
+ * Data point used to plot the evolution of metrics in the progress chart.
+ */
 export interface ProgressChartDatum {
   label: string;
   valor: number;
 }
 
+/**
+ * Props accepted by the `ProgressChart` component.
+ */
 interface ProgressChartProps {
   data: ProgressChartDatum[];
   titulo: string;
   legenda: string;
 }
 
+/**
+ * Renders a simple SVG-based area chart highlighting recent performance metrics.
+ *
+ * @param props - Chart configuration and dataset.
+ * @param props.data - Ordered list of data points to draw.
+ * @param props.titulo - Title displayed above the chart.
+ * @param props.legenda - Supplementary label describing the plotted metric.
+ * @returns A responsive chart visualisation or an empty-state message when no data is provided.
+ */
 const ProgressChart = ({ data, titulo, legenda }: ProgressChartProps) => {
   if (!data.length) {
     return (

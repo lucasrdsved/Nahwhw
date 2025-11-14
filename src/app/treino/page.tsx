@@ -11,6 +11,11 @@ import type { Aluno, Progresso, Session, Treino, TreinoExercicio } from '@/types
 
 type TreinoCompleto = Treino & { treinos_exercicios?: TreinoExercicio[] };
 
+/**
+ * Interactive training workspace allowing personals and students to review and update prescriptions.
+ *
+ * @returns The treino page layout containing timers, exercise lists and history panels.
+ */
 const TreinoPage = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [alunos, setAlunos] = useState<Aluno[]>([]);
@@ -62,6 +67,15 @@ const TreinoPage = () => {
       .slice(0, 5);
   }, [progresso, selectedAluno]);
 
+  /**
+   * Updates a prescription field both in the mock backend and local state to keep the UI responsive.
+   *
+   * @typeParam K - Key of `TreinoExercicio` being updated.
+   * @param id - Identifier of the prescription being modified.
+   * @param campo - Field name to update.
+   * @param valor - New value written to the field.
+   * @returns A promise that resolves when the mock API and state are synchronised.
+   */
   const handleUpdatePrescricao = async <K extends keyof TreinoExercicio>(id: string, campo: K, valor: TreinoExercicio[K]) => {
     setUpdatingId(id);
     const payload = { [campo]: valor } as Partial<TreinoExercicio>;

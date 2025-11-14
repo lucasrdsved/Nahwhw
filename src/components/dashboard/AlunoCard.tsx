@@ -5,10 +5,20 @@ import { Trophy, TrendingUp } from 'lucide-react';
 
 import type { Aluno } from '@/types';
 
+/**
+ * Props accepted by the `AlunoCard` component to display student information.
+ */
 interface AlunoCardProps {
   aluno: Aluno;
 }
 
+/**
+ * Presents a summary card for a student including avatar, goals and progression metrics.
+ *
+ * @param props - Student card configuration.
+ * @param props.aluno - Student record enriched with optional relational data.
+ * @returns A decorated student card containing progress insights.
+ */
 const AlunoCard = ({ aluno }: AlunoCardProps) => {
   const progresso = aluno.progresso_meta ?? { semana: 0, meta: 100 };
   const percentual = Math.min(100, Math.round((progresso.semana / progresso.meta) * 100));

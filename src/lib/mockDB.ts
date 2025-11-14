@@ -27,6 +27,12 @@ export interface MockDatabase {
 const currentDay = new Date();
 const currentWeekday = currentDay.getDay();
 
+/**
+ * Calculates the weekday index by applying an offset relative to the current day.
+ *
+ * @param offset - Number of days to offset from today (can be negative).
+ * @returns Weekday number (0-6) adjusted for the provided offset.
+ */
 const weekDay = (offset: number): number => {
   return (currentWeekday + offset + 7) % 7;
 };

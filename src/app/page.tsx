@@ -3,6 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
+/**
+ * Root route that immediately redirects users to the login page to start the experience.
+ *
+ * @returns A lightweight placeholder rendered while the redirect is processed.
+ */
 export default function HomePage() {
   const router = useRouter();
 

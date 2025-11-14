@@ -11,6 +11,11 @@ import { supabase } from '@/lib/supabaseClientMock';
 import type { Aluno, Feedback, Progresso, Session, Treino } from '@/types';
 type TreinoCompleto = Treino & { treinos_exercicios?: Treino['treinos_exercicios'] };
 
+/**
+ * Main analytics dashboard summarising student progress, feedback and daily training plans.
+ *
+ * @returns The dashboard layout populated with charts, cards and actionable insights.
+ */
 const DashboardPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [session, setSession] = useState<Session | null>(null);

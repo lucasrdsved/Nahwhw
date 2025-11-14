@@ -2,6 +2,11 @@
 
 import { useEffect } from 'react';
 
+/**
+ * Registers the service worker when running in the browser to enable the PWA experience.
+ *
+ * @returns `null` because this component performs a side-effect only.
+ */
 const PwaSetup = () => {
   useEffect(() => {
     if (!('serviceWorker' in navigator)) {

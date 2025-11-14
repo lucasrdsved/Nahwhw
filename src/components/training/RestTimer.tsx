@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Pause, Play, RotateCcw } from 'lucide-react';
 
+/**
+ * Props supported by the `RestTimer` component for configuring the countdown experience.
+ */
 interface RestTimerProps {
   duration?: number;
   autoStart?: boolean;
@@ -10,6 +13,16 @@ interface RestTimerProps {
   onComplete?: () => void;
 }
 
+/**
+ * Renders an animated circular countdown timer used between exercise sets.
+ *
+ * @param props - Configuration for the timer behaviour and messaging.
+ * @param props.duration - Number of seconds to count down from (defaults to 60).
+ * @param props.autoStart - Whether the timer should start automatically on mount.
+ * @param props.label - Label displayed above the timer to provide context.
+ * @param props.onComplete - Callback invoked when the countdown reaches zero.
+ * @returns A visual countdown timer with controls to pause, play and reset.
+ */
 const RestTimer = ({ duration = 60, autoStart = false, label = 'Descanso', onComplete }: RestTimerProps) => {
   const radius = 80;
   const circumference = 2 * Math.PI * radius;
