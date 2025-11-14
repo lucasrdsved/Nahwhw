@@ -1,7 +1,18 @@
 'use client';
 
-const GraficoProgresso = ({ data, titulo, legenda }) => {
-  if (!data?.length) {
+export interface ProgressChartDatum {
+  label: string;
+  valor: number;
+}
+
+interface ProgressChartProps {
+  data: ProgressChartDatum[];
+  titulo: string;
+  legenda: string;
+}
+
+const ProgressChart = ({ data, titulo, legenda }: ProgressChartProps) => {
+  if (!data.length) {
     return (
       <div className="glass-panel flex h-full flex-col items-center justify-center p-6 text-center text-slate-400">
         <p>Sem dados suficientes para gerar o gráfico.</p>
@@ -19,7 +30,7 @@ const GraficoProgresso = ({ data, titulo, legenda }) => {
     return `${x},${y}`;
   });
 
-  const gradientId = `grad-${titulo?.replace(/\s+/g, '') ?? 'progresso'}`;
+  const gradientId = `grad-${titulo.replace(/\s+/g, '')}`;
 
   return (
     <div className="glass-panel flex h-full flex-col gap-4 p-6">
@@ -49,11 +60,7 @@ const GraficoProgresso = ({ data, titulo, legenda }) => {
               <stop offset="100%" stopColor="#0EA5E9" />
             </linearGradient>
           </defs>
-          <polygon
-            points={`0,100 ${points.join(' ')} 100,100`}
-            fill={`url(#${gradientId})`}
-            opacity="0.6"
-          />
+          <polygon points={`0,100 ${points.join(' ')} 100,100`} fill={`url(#${gradientId})`} opacity="0.6" />
         </svg>
         <div className="absolute inset-0 grid grid-cols-4">
           {data.map((item) => (
@@ -68,4 +75,4 @@ const GraficoProgresso = ({ data, titulo, legenda }) => {
   );
 };
 
-export default GraficoProgresso;
+export default ProgressChart;

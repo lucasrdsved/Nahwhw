@@ -17,16 +17,27 @@ export interface Profile {
   role: UserRole;
   full_name: string;
   avatar_url?: string;
+  bio?: string;
 }
 
-export type ObjetivoAluno = 'emagrecimento' | 'hipertrofia' | 'condicionamento' | 'performance';
+export type ObjetivoAluno = 'Hipertrofia' | 'Condicionamento' | 'Performance' | 'Emagrecimento' | string;
+
+export interface ProgressoMeta {
+  semana: number;
+  meta: number;
+}
 
 export interface Aluno {
   id: string;
   personal_id: string;
   profile_id: string;
   objetivo: ObjetivoAluno;
-  profiles: Profile; // Relação com Profile
+  idade?: number;
+  peso_atual_kg?: number;
+  altura_m?: number;
+  progresso_meta?: ProgressoMeta;
+  marcadores?: string[];
+  profiles?: Profile | null;
 }
 
 export interface Medida {
@@ -45,11 +56,11 @@ export interface Medida {
 export interface Exercicio {
   id: string;
   nome: string;
-  descricao: string;
-  grupo_muscular: string;
+  grupo: string;
   equipamento: string;
-  video_url?: string;
-  thumbnail_url?: string;
+  imagem?: string;
+  video?: string;
+  foco?: string;
 }
 
 export interface TreinoExercicio {
@@ -63,7 +74,8 @@ export interface TreinoExercicio {
   instrucoes?: string;
   order: number;
   observacoes_personal?: string;
-  exercicios: Exercicio; // Relação com Exercicio
+  intensidade?: string;
+  exercicios?: Exercicio | null; // Relação com Exercicio
 }
 
 export interface Treino {
@@ -74,7 +86,7 @@ export interface Treino {
   dia_semana: number;
   descricao?: string;
   objetivo?: string;
-  treinos_exercicios: TreinoExercicio[]; // Relação com TreinoExercicio
+  treinos_exercicios?: TreinoExercicio[];
 }
 
 export interface ProgressoMetricas {

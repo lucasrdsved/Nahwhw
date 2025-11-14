@@ -1,21 +1,44 @@
-// @ts-check
+import type {
+  Aluno,
+  Exercicio,
+  Feedback,
+  Medida,
+  Profile,
+  Progresso,
+  Treino,
+  TreinoExercicio,
+  User,
+  VideoCorrecao,
+} from '@/types';
+
+export interface MockDatabase {
+  users: User[];
+  profiles: Profile[];
+  alunos: Aluno[];
+  treinos: Treino[];
+  exercicios: Exercicio[];
+  treinos_exercicios: TreinoExercicio[];
+  medidas: Medida[];
+  progresso: Progresso[];
+  feedback: Feedback[];
+  videos_correcao: VideoCorrecao[];
+}
 
 const currentDay = new Date();
 const currentWeekday = currentDay.getDay();
 
-const weekDay = (offset) => {
-  const value = (currentWeekday + offset + 7) % 7;
-  return value;
+const weekDay = (offset: number): number => {
+  return (currentWeekday + offset + 7) % 7;
 };
 
-const users = [
+const users: User[] = [
   { id: 'u1', email: 'personal@teste.com' },
   { id: 'u2', email: 'matheus.alves@teste.com' },
   { id: 'u3', email: 'joana.melo@teste.com' },
   { id: 'u4', email: 'carla.sousa@teste.com' },
 ];
 
-const profiles = [
+const profiles: Profile[] = [
   {
     id: 'p1',
     user_id: 'u1',
@@ -50,7 +73,7 @@ const profiles = [
   },
 ];
 
-const alunos = [
+const alunos: Aluno[] = [
   {
     id: 'a1',
     personal_id: 'p1',
@@ -80,13 +103,13 @@ const alunos = [
     objetivo: 'Performance',
     idade: 35,
     peso_atual_kg: 58,
-    altura_m: 1.70,
+    altura_m: 1.7,
     progresso_meta: { semana: 72, meta: 100 },
     marcadores: ['Mobilidade', 'Estabilidade', 'Força funcional'],
   },
 ];
 
-const exercicios = [
+const exercicios: Exercicio[] = [
   {
     id: 'e1',
     nome: 'Supino Reto',
@@ -134,7 +157,7 @@ const exercicios = [
   },
 ];
 
-const treinos = [
+const treinos: Treino[] = [
   {
     id: 't1',
     aluno_id: 'a1',
@@ -164,7 +187,7 @@ const treinos = [
   },
 ];
 
-const treinos_exercicios = [
+const treinos_exercicios: TreinoExercicio[] = [
   {
     id: 'te1',
     treino_id: 't1',
@@ -220,7 +243,7 @@ const treinos_exercicios = [
   },
 ];
 
-const medidas = [
+const medidas: Medida[] = [
   {
     id: 'm1',
     aluno_id: 'a1',
@@ -236,7 +259,7 @@ const medidas = [
     id: 'm2',
     aluno_id: 'a1',
     created_at: new Date(currentDay.getFullYear(), currentDay.getMonth() - 1, 5).toISOString(),
-    peso_kg: 84.0,
+    peso_kg: 84,
     altura_cm: 178,
     gordura_percentual: 18.5,
     braco_cm: 40,
@@ -255,7 +278,7 @@ const medidas = [
   },
 ];
 
-const progresso = [
+const progresso: Progresso[] = [
   {
     id: 'pr1',
     aluno_id: 'a1',
@@ -296,7 +319,7 @@ const progresso = [
   },
 ];
 
-const feedback = [
+const feedback: Feedback[] = [
   {
     id: 'fb1',
     aluno_id: 'a1',
@@ -317,7 +340,7 @@ const feedback = [
   },
 ];
 
-const videos_correcao = [
+const videos_correcao: VideoCorrecao[] = [
   {
     id: 'vc1',
     aluno_id: 'a1',
@@ -338,7 +361,7 @@ const videos_correcao = [
   },
 ];
 
-export const mockDB = {
+export const mockDB: MockDatabase = {
   users,
   profiles,
   alunos,
