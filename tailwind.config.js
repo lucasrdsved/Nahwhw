@@ -2,43 +2,61 @@
 module.exports = {
   darkMode: 'class',
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts}',
   ],
   theme: {
     extend: {
       colors: {
-        'brand-blue': '#007AFF',
-        'brand-green': '#34C759',
-        'brand-neon-blue': '#4D9FFF',
-        'brand-neon-green': '#5EFF8A',
-        'dark-bg': '#000000',
-        'dark-surface': '#121212',
-        'dark-card': '#1C1C1E',
-        'dark-border': 'rgba(128, 128, 128, 0.2)',
-        'dark-text': '#E5E5E7',
-        'dark-text-secondary': '#8E8E93',
+        midnight: '#05070F',
+        graphite: '#1A1D29',
+        steel: '#272B38',
+        neon: '#3B82F6',
+        neonSoft: '#60A5FA',
+        accent: '#0EA5E9',
+        glass: 'rgba(21, 24, 34, 0.65)',
+        surface: 'rgba(255, 255, 255, 0.04)',
+        outline: 'rgba(94, 109, 140, 0.35)',
+        success: '#34D399',
+        warning: '#FBBF24',
+        danger: '#F87171',
       },
       borderRadius: {
-        'xl': '1rem',
-        '2xl': '1.5rem',
-        '3xl': '2rem',
-        '4xl': '2.5rem',
+        xl: '1.5rem',
+        '2xl': '2rem',
+        pill: '9999px',
+      },
+      boxShadow: {
+        glow: '0 0 40px rgba(59, 130, 246, 0.35)',
+        card: '0 24px 60px rgba(5, 7, 15, 0.6)',
       },
       backdropBlur: {
-        'xl': '24px',
+        xl: '28px',
       },
       keyframes: {
-        'fade-in': {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        pulseRing: {
+          '0%': { transform: 'scale(.9)', opacity: '0.85' },
+          '70%': { transform: 'scale(1.3)', opacity: '0' },
+          '100%': { transform: 'scale(1.5)', opacity: '0' },
+        },
+        sweep: {
+          '0%': { strokeDashoffset: 100 },
+          '100%': { strokeDashoffset: 0 },
         },
       },
       animation: {
-        'fade-in': 'fade-in 0.5s ease-out forwards',
+        pulseRing: 'pulseRing 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+        sweep: 'sweep 45s linear infinite',
+      },
+      fontFamily: {
+        display: ['"SF Pro Display"', 'Inter', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      backgroundImage: {
+        'mesh-light': 'radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 40%), radial-gradient(circle at 80% 0%, rgba(14,165,233,0.18), transparent 42%), radial-gradient(circle at 50% 100%, rgba(96,165,250,0.25), transparent 55%)',
       },
     },
   },
   plugins: [],
-}
+};

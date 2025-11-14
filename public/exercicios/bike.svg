@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#0EA5E9" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="400" fill="url(#bg)" />
+  <g fill="none" stroke="#1E293B" stroke-width="12" opacity="0.3">
+    <circle cx="180" cy="252" r="92" />
+    <circle cx="460" cy="252" r="92" />
+  </g>
+  <g fill="none" stroke="url(#accent)" stroke-width="18" stroke-linecap="round">
+    <path d="M140 252h220l100-120" />
+    <path d="M240 140l60 112" />
+    <path d="M180 252l70-136h60l150 136" />
+  </g>
+  <text x="320" y="356" text-anchor="middle" font-family="'Inter', sans-serif" font-size="36" font-weight="600" fill="#E2E8F0">Bike Sprint</text>
+</svg>

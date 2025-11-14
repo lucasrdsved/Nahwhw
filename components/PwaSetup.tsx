@@ -1,16 +1,20 @@
 'use client';
+
 import { useEffect } from 'react';
 
 const PwaSetup = () => {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-          console.log('SW registered: ', registration);
-        }).catch(registrationError => {
-          console.log('SW registration failed: ', registrationError);
-        });
-      });
+      const register = async () => {
+        try {
+          await navigator.serviceWorker.register('/service-worker.js');
+          console.info('[PWA] Service worker registrado com sucesso.');
+        } catch (error) {
+          console.warn('[PWA] Falha ao registrar o service worker', error);
+        }
+      };
+
+      register();
     }
   }, []);
 

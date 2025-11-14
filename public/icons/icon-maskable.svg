@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)" />
+  <circle cx="256" cy="220" r="200" fill="url(#halo)" />
+  <g fill="none" stroke="#38BDF8" stroke-width="28" stroke-linecap="round">
+    <path d="M124 360c44-84 88-148 132-232 44 84 88 148 132 232" />
+    <path d="M180 360c24-46 60-86 76-140 16 54 52 94 76 140" opacity="0.6" />
+  </g>
+  <text x="256" y="390" text-anchor="middle" font-family="'Inter', sans-serif" font-size="96" font-weight="700" fill="#E2E8F0">FIT</text>
+</svg>
