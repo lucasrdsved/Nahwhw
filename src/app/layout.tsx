@@ -20,6 +20,13 @@ export const viewport: Viewport = {
   themeColor: '#05070F',
 };
 
+/**
+ * Global root layout applying fonts, metadata and PWA setup for every Next.js route.
+ *
+ * @param props - Layout properties provided by Next.js.
+ * @param props.children - Route content to render inside the layout shell.
+ * @returns The root HTML structure shared across pages.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

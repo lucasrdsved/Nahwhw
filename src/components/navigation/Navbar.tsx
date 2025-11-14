@@ -15,6 +15,11 @@ const navItems: Array<{ href: string; label: string; icon: LucideIcon }> = [
   { href: '/perfil', label: 'Perfil', icon: User },
 ];
 
+/**
+ * Displays the primary navigation bar and adapts its headline based on the authenticated role.
+ *
+ * @returns Navigation markup with links to the main application sections.
+ */
 const Navbar = () => {
   const pathname = usePathname();
   const [role, setRole] = useState<UserRole>('personal');

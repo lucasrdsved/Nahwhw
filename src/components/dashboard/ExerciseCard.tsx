@@ -5,11 +5,22 @@ import { Clock, Flame, Repeat } from 'lucide-react';
 
 import type { Exercicio, TreinoExercicio } from '@/types';
 
+/**
+ * Props used to render a detailed exercise card with prescription highlights.
+ */
 interface ExerciseCardProps {
   exercicio: Exercicio | null | undefined;
   prescription?: TreinoExercicio | null;
 }
 
+/**
+ * Displays a single exercise including media, prescription data and intensity tags.
+ *
+ * @param props - Exercise card configuration.
+ * @param props.exercicio - Exercise data to visualise; when `null` the card renders nothing.
+ * @param props.prescription - Optional prescription information to display alongside the exercise.
+ * @returns A stylised exercise card or `null` when no exercise data is available.
+ */
 const ExerciseCard = ({ exercicio, prescription }: ExerciseCardProps) => {
   if (!exercicio) return null;
 

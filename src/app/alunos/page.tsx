@@ -20,6 +20,11 @@ interface FormValues {
   altura: string;
 }
 
+/**
+ * Management screen for personals to review and onboard students using the mock Supabase backend.
+ *
+ * @returns The alunos page with roster overview and creation form.
+ */
 const AlunosPage = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [session, setSession] = useState<Session | null>(null);
@@ -34,6 +39,11 @@ const AlunosPage = () => {
     altura: '',
   });
 
+  /**
+   * Fetches all students visible to the current session, including related profile information.
+   *
+   * @returns A promise that resolves once local state has been updated with the retrieved students.
+   */
   const fetchAlunos = async () => {
     const { data } = await supabase.from('alunos').select('*, profiles(*)');
     setAlunos((data as Aluno[] | null) ?? []);
@@ -48,6 +58,12 @@ const AlunosPage = () => {
     void bootstrap();
   }, []);
 
+  /**
+   * Handles student creation by inserting the related user, profile and aluno records in the mock database.
+   *
+   * @param event - Browser form submission event.
+   * @returns A promise that resolves once the student has been persisted and UI state refreshed.
+   */
   const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!session?.profile?.id) return;

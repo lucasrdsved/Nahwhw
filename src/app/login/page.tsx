@@ -10,12 +10,23 @@ const quickUsers = [
   { label: 'Joana (Aluna)', email: 'joana.melo@teste.com' },
 ];
 
+/**
+ * Authenticates a user against the mock Supabase service using a simple email-only flow.
+ *
+ * @returns The login form allowing quick access via predefined accounts.
+ */
 export default function LoginPage() {
   const [email, setEmail] = useState('personal@teste.com');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  /**
+   * Handles form submission by triggering the mock Supabase sign-in flow.
+   *
+   * @param event - Browser form submission event.
+   * @returns A promise that resolves once navigation or error handling completes.
+   */
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
