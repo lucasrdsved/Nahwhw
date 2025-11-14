@@ -3,7 +3,7 @@ import { delay } from './utils';
 import { Session } from '@/types';
 
 export const auth = {
-  signInWithPassword: async ({ email, password }: { email: string, password?: string }) => {
+  signIn: async ({ email }: { email: string }) => {
     await delay(300);
 
     const user = mockDB.users.find((u) => u.email === email);
@@ -13,7 +13,7 @@ export const auth = {
 
     const profile = mockDB.profiles.find((p) => p.user_id === user.id);
     if (!profile) {
-        return { data: null, error: { message: 'Perfil não encontrado para este usuário.'}};
+      return { data: null, error: { message: 'Perfil não encontrado para este usuário.' } };
     }
 
     const session: Session = {
@@ -30,12 +30,12 @@ export const auth = {
   getSession: async () => {
     await delay(50);
     const sessionStr = localStorage.getItem('supabase.session');
-    
+
     if (sessionStr) {
       const session = JSON.parse(sessionStr);
       return { data: { session }, error: null };
     }
-    
+
     return { data: { session: null }, error: null };
   },
 
