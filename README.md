@@ -84,3 +84,11 @@ The `PwaSetup` component registers a service worker (`/service-worker.js`) once 
 ## License
 
 This project is intended for demonstration purposes. Adapt and integrate it into your own stack as needed.
+
+## GitHub Copilot CLI
+
+Para instalar globalmente o GitHub Copilot CLI:
+
+```bash
+npm install -g @github/copilot
+```
